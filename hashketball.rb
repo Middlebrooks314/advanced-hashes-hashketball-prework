@@ -210,18 +210,68 @@ def big_shoe_rebounds
   rebounds
 end
 
-  def most_points_scored 
-    most_points = []
-  game_hash.each do |location, team_data|
-        team_data[:players].each do |player, player_stats|
-          if player_stats == [:points]
-            most_points >> player_stats[:points]
-        most_points.sort 
-        most_points[-1]
-      end
-    end 
-  end 
-end 
+  
 
-      
+  game_hash[:home][:players].each do |player, data|
+    data.each do |stat, value|
+      if stat == :shoe && value == biggest
+        data.each do |stat, value|
+          if stat == :rebounds
+            return value
+          end
+        end
+      end
+    end
+  end
+end
+
+def most_points_scored
+  points = []
+  game_hash[:home][:players].each do |player, data|
+    data.each do |stat, value|
+      if stat == :points
+        points << value
+      end
+    end
+  end
+
+  game_hash[:away][:players].each do |player, data|
+    data.each do |stat, value|
+      if stat == :points
+        points << value
+      end
+    end
+  end
+  points = points.sort
+  puts points[-1]
+end
+
+def winning_team
+  home_points = 0
+  away_points = 0
+  game_hash[:home][:players].each do |player, data|
+    data.each do |stat, value|
+      if stat == :points
+        home_points += value
+      end
+    end
+  end
+
+  game_hash[:away][:players].each do |player, data|
+    data.each do |stat, value|
+      if stat == :points
+        away_points += value
+      end
+    end
+  end
+
+  if home_points > away_points
+    return home_points
+  else
+    return away_points
+  end
+end
+
+
+  
     
